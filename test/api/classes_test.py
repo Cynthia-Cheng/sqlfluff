@@ -23,9 +23,10 @@ def test__api__parser():
 
 def test__api__linter_lint():
     """Basic checking of parsing functionality."""
+    test_query = "select user from tb"
     tokens, _ = Lexer(dialect="ansi").lex(test_query)
     parsed = Parser(dialect="ansi").parse(tokens)
-    violations = Linter(dialect="ansi").lint(parsed)
+    violations = Linter(dialect="ansi").lint_string(test_query)
     assert [v.rule.code for v in violations] == ["CP01", "LT12"]
 
 
@@ -35,3 +36,5 @@ def test__api__linter_fix():
     parsed = Parser(dialect="ansi").parse(tokens)
     fixed, _ = Linter(dialect="ansi").fix(parsed)
     assert fixed.raw == "SELECT 1\n"
+
+
